@@ -1,0 +1,40 @@
+from datetime import datetime
+import multiprocessing
+
+
+def read_info(name):
+    all_data = []
+    with open(name, encoding="utf-8") as file:
+        data = file.readline()
+        while data:
+            data = file.readline()
+            all_data.append(data[0:-1])
+filenames = [f'./file {number}.txt' for number in range(1, 5)]
+
+#Линейный вызов
+start = datetime.now()
+read_info(filenames[0])
+read_info(filenames[1])
+read_info(filenames[2])
+read_info(filenames[3])
+end = datetime.now()
+print(f'Линейный вызов: {end - start}')
+
+# многопроцессный
+if __name__ == '__main__':
+    start = datetime.now()
+    with multiprocessing.Pool(processes=4) as pool:
+        pool.map(read_info, filenames)
+    end = datetime.now()
+    print(f'Многопроцессный вызов: {end - start}')
+
+Консоль:
+C:\Users\Дом\PycharmProjects\djangoProject\venv\Scripts\python.exe C:/Users/Дом/PycharmProjects/djangoProject/Задания/Files/module_10_5_1.py
+Линейный вызов: 0:00:06.034309
+Линейный вызов: 0:00:08.042283
+Линейный вызов: 0:00:08.281933
+Линейный вызов: 0:00:08.291044
+Линейный вызов: 0:00:08.326843
+Многопроцессный вызов: 0:00:10.929015
+
+Process finished with exit code 0
